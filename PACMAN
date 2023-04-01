@@ -1,0 +1,66 @@
+import pandas as pd
+
+print("Welcome to PACMAN (Payroll Automation and Calculation Management Application Network)")
+
+
+num_employees = int(input("Enter the number of employees: "))
+
+payroll = pd.DataFrame(columns=['Name', 'Salary', 'Dependents', 'SSS Contribution', 'PhilHealth Contribution', 'Pag-IBIG Contribution', 'Taxable Income', 'Tax', 'Deductions', 'Net Pay'])
+
+for i in range(num_employees):
+    print(f"\nEmployee #{i+1}")
+    
+    #employee information
+    name = input("Enter employee name: ")
+    salary = float(input("Enter employee monthly salary: "))
+    dependents = int(input("Enter number of dependents: "))
+
+    #deductible options
+    print("\nChoose deductible options:")
+    print("1. SSS")
+    print("2. PhilHealth")
+    print("3. Pag-IBIG")
+    deductible_options = input("Enter comma-separated options: ").split(',')
+
+    #government deductions
+    sss = 0
+    philhealth = 0
+    pagibig = 0
+    for option in deductible_options:
+        if option == '1':
+            sss = salary * 0.0363
+        elif option == '2':
+            philhealth = salary * 0.0275
+        elif option == '3':
+            pagibig = salary * 0.01
+
+    taxable_income = salary - sss - philhealth - pagibig - (dependents * 250)
+    if taxable_income <= 250000:
+        tax = 0
+    elif taxable_income <= 400000:
+        tax = (taxable_income - 250000) * 0.20
+    elif taxable_income <= 800000:
+        tax = 30000 + (taxable_income - 400000) * 0.25
+    elif taxable_income <= 2000000:
+        tax = 130000 + (taxable_income - 800000) * 0.30
+    else:
+        tax = 490000 + (taxable_income - 2000000) * 0.35
+
+    #net pay
+    deductions = sss + philhealth + pagibig + tax
+    net_pay = salary - deductions
+
+    #Add employee payroll information to dataframe
+    payroll = payroll.append({'Name': name, 'Salary': salary, 'Dependents': dependents, 'SSS Contribution': sss, 'PhilHealth Contribution': philhealth, 'Pag-IBIG Contribution': pagibig, 'Taxable Income': taxable_income, 'Tax': tax, 'Deductions': deductions, 'Net Pay': net_pay}, ignore_index=True)
+
+print("\nPayroll Information:")
+print(payroll)
+
+#Excel file
+save_option = input("Would you like to save the payroll information to an Excel file? (y/n) ")
+if save_option.lower() == 'y':
+    filename = input("Enter filename: ")
+    payroll.to_excel(f"{filename}.xlsx", index=False)
+    print(f"Payroll information saved to {filename}.xlsx")
+else:
+    print("Payroll information not saved.")

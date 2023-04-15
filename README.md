@@ -25,4 +25,6 @@ Overall, this script provides a simple and efficient way to automate payroll cal
 11. Saving of the payroll information to an Excel file if the user selects "y".
 12. Error handling for user input.
 
+## Hierarchy Chart
+![327432372_907966863826566_4643839586405105758_n](https://user-images.githubusercontent.com/127076390/232178734-378b71d4-d64f-454c-8995-3bed2e2444eb.png)
 
